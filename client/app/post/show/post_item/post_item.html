@@ -1,0 +1,34 @@
+
+
+<div class="thumbnail post-item">
+    <div class="media">
+      <div class="media-left">
+        <a href="/ofwho/{{card.author._id}}">
+          <img class="post-item-avatar media-object" style="max-width:48px;" src="{{card.author.avatar | ImgSrcComplete: card.author.account:'avatar'}}" alt="I'm {{card.author.name}}">
+        </a>
+      </div>
+      <div class="media-body">
+        <h4 class="media-heading text-primary">{{card.author.name}}</h4>
+        <a href="/post/{{card._id}}">
+          <h5>{{card.title}}</h5>
+        </a>
+        <p>{{card.content}}</p>
+
+        <a href="/post/{{card._id}}">
+          <img src="/{{card.author.account}}/imgs/{{card.mediaUrl[0]}}" alt="">
+        </a>
+        <p class="text-info"><small>{{card.createDate | date : 'yyyy-MM-dd HH:mm:ss'}}</small></p>
+        <div class="btn-group pull-right" role="group">
+          <a href="/post/{{card._id}}" class="btnWithCount btn btn-sm btn-primary">
+            <span class="font-icon glyphicon glyphicon-comment" aria-hidden="true"></span>
+            <span class="badge">{{card.comments.length}}</span>
+          </a>
+          <a href="#" class="btnWithCount btn btn-sm btn-primary" role="button" ng-click="mother.addOrRemoveLike(card._id)">
+            <span class="font-icon glyphicon glyphicon-heart" ng-class="{ 'like-on': mother.isLiked(card.$index) }"
+              aria-hidden="true"></span>
+            <span class="badge">{{card.like.length}}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+</div>

@@ -1,0 +1,47 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<header class="hero-unit" id="banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4 col-sm-3">
+        <div class="set-profile center-block">
+          <img class="img-circle" ng-src="{{selUser.avatar | ImgSrcComplete: selUser.account:'avatar'}}" alt="I'm {{selUser.name}}">
+        </div>
+        <h1>'{{selUser.name}}'</h1>
+        <p class="lead">{{selUser.signature}}</p>
+      </div>
+    </div>
+    <div class="row hidden-xs">
+      <div class="col-lg-4 col-sm-3"></div>
+      <div class="col-lg-8 col-sm-9 main-kid-list">
+        <div class="row">
+          <div class="col-xs-3 col-lg-2" ng-repeat="kid in selUser.kids">
+            <div class="center-block">
+              <img class="img-circle" ng-src="assets/images/{{kid.avatar}}" alt="I'm {{kid.name}}">
+            </div>
+            <h5>{{kid.name}}(Lv{{kid.level}})</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div id="main" class="container containerWithNoPadding">
+  <div deckgrid class="deckgrid" source="posts" cardTemplate="app/post/show/post_item/post_item.html"></div>
+</div>
+
+<footer class="footer hidden-xs">
+  <div class="container">
+    <p>
+      <a href popover-trigger="mouseenter" popover-template="dynamicPopover.templateUrl" popover-title="{{dynamicPopover.title}}">微信(blackboyhc)</a>
+
+      <script type="text/ng-template" id="pop_tpl.html">
+        <div>
+          <img style="width: 100%;" src="assets/images/mmqrcode1444115939933.png">
+        </div>
+      </script>
+      |
+      <a href="http://weibo.com/u/1135137274">@13enjamin</a></p>
+  </div>
+</footer>

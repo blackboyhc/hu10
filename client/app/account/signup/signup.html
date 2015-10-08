@@ -1,0 +1,70 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>注册</h1>
+    </div>
+    <div class="col-sm-12">
+      <form class="form" name="form" ng-submit="register(form)" novalidate>
+
+        <div class="form-group" ng-class="{ 'has-success': form.name.$valid && submitted,
+                                            'has-error': form.name.$invalid && submitted }">
+          <label>姓名</label>
+
+          <input type="text" name="name" class="form-control" ng-model="user.name"
+                 required/>
+          <p class="help-block text-warning" ng-show="form.name.$error.required && submitted">
+            请填写姓名
+          </p>
+        </div>
+
+        <div class="form-group" ng-class="{ 'has-success': form.account.$valid && submitted,
+                                            'has-error': form.account.$invalid && submitted }">
+          <label>账号(手机号)</label>
+
+          <input type="text" name="account" class="form-control" ng-model="user.account"
+                 required
+                 mongoose-error/>
+          <p class="help-block text-warning" ng-show="form.account.$error.account && submitted">
+            手机号码有误
+          </p>
+          <p class="help-block text-warning" ng-show="form.account.$error.required && submitted">
+            请填写手机号码
+          </p>
+          <p class="help-block" ng-show="form.account.$error.mongoose">
+            {{ errors.account }}
+          </p>
+        </div>
+
+        <div class="form-group" ng-class="{ 'has-success': form.password.$valid && submitted,
+                                            'has-error': form.password.$invalid && submitted }">
+          <label>密码</label>
+
+          <input type="password" name="password" class="form-control" ng-model="user.password"
+                 ng-minlength="6"
+                 required
+                 mongoose-error/>
+          <p class="help-block text-warning"
+             ng-show="(form.password.$error.minlength || form.password.$error.required) && submitted">
+            密码长度必须大于6
+          </p>
+          <p class="help-block" ng-show="form.password.$error.mongoose">
+            {{ errors.password }}
+          </p>
+        </div>
+
+        <div>
+          <button class="btn btn-primary btn-login" type="submit">
+            注册
+          </button>
+          <a class="btn btn-default btn-register" href="/login">
+            登录
+          </a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+  <hr>
+</div>

@@ -1,0 +1,85 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <h3>发布动态</h3>
+    </div>
+    <div class="col-sm-12">
+      <form class="form" name="form" ng-submit="addPost(form)" novalidate>
+
+        <div class="form-group" ng-class="{ 'has-success': form.title.$valid && submitted,
+                                            'has-error': form.title.$invalid && submitted }">
+          <label>标题</label>
+
+          <input type="text" name="title" class="form-control" ng-model="post.title"
+                 required/>
+
+          <p class="help-block" ng-show="form.title.$error.required && submitted">
+            请填写标题
+          </p>
+        </div>
+
+        <div class="form-group" ng-class="{ 'has-success': form.content.$valid && submitted,
+                                            'has-error': form.content.$invalid && submitted }">
+          <label>内容</label>
+
+          <textarea type="text" name="content" class="form-control" ng-model="post.content"
+                    ng-maxlength="200"
+                    required></textarea>
+
+          <p class="help-block" ng-show="form.content.$error.required && submitted">
+            请填写内容
+          </p>
+
+          <p class="help-block"
+             ng-show="form.content.$error.maxlength  && submitted">
+            内容太长，请填写少于200字
+          </p>
+        </div>
+        <div class="form-group" ng-class="{ 'has-success': form.tag.$valid && submitted,
+                                            'has-error': form.tag.$invalid && submitted }">
+          <label>标签</label>
+          <input type="text" name="tag" class="form-control" ng-model="post.tags"/>
+
+          <div>
+            <div id="div-tags">
+              <a class="text-primary" ng-repeat="tag in tags" ng-click="appendTag(tag.content)">#{{tag.content}}#</a>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-xs-4 col-sm-4  col-md-2 thumb-div" ng-repeat="file in picFiles">
+              <a href class="thumbnail add-post" ng-click="removePic($index)">
+                <img ngf-src="file"/>
+              </a>
+
+              <div class="progress" ng-show="file.progress >= 0">
+                <div class="progress-bar" role="progressbar" aria-valuenow="file.progress" aria-valuemin="0"
+                     aria-valuemax="100" style="width: {{file.progress}}%;">
+                  <span class="sr-only"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button ngf-validate-fn="" type="file" name="pics" ngf-select="validateUpload()" multiple accept="image/*"
+                  ngf-keep="true" ngf-keep-distinct="true" ngf-max-size="5MB" ng-model="picFiles"
+                  ng-hide="picFiles.length >= 6">
+            <span class="glyphicon glyphicon-camera" aria-hidden="true"></span></button>
+          <p class="help-block text-warning" ng-show="picFiles.length >= 6">
+            最多只能添加6张照片
+          </p>
+
+          <p class="help-block text-warning" ng-show="form.pics.$error.maxSize">
+            单张照片不能大于5M
+          </p>
+        </div>
+        <div>
+          <button class="btn btn-primary" type="submit">发布</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <hr>
+</div>

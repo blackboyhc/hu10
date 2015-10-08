@@ -1,0 +1,65 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container">
+  <div class="page-header post-detail-page">
+    <h1>{{post.title}}</h1>
+  </div>
+  <div id="div-thumb">
+    <carousel interval="5000" no-wrap="true">
+      <slide ng-repeat="url in post.mediaUrl" active="slide.active">
+        <img ng-src="/{{post.author.account}}/imgs/{{url}}" style="margin:auto;">
+
+        <div class="carousel-caption">
+
+        </div>
+      </slide>
+    </carousel>
+  </div>
+  <div id="div-content" class="">
+    <p>{{post.content}}</p>
+  </div>
+  <div id="div-tags">
+    <span class="label label-primary" ng-repeat="tag in post.tags">{{tag}}</span>
+  </div>
+  <div id="div-comments" class="well">
+    <post-like ng-show="post"></post-like>
+    <div class="media" ng-repeat="comment in post.comments">
+      <div class="media-left">
+        <a href="#" ng-click="touchWho(comment.from)">
+          <img class="img-circle media-object comment-avatar"
+               src="{{comment.from.avatar | ImgSrcComplete: comment.from.account:'avatar'}}"
+               alt="{{comment.from.name}}">
+        </a>
+      </div>
+      <div class="comment-content media-body">
+        <h4 class="media-heading text-primary">{{comment.from.name}}</h4>
+
+        <p><span class="label label-info" ng-show="comment.to.name">@{{comment.to.name}}</span> {{comment.content}}</p>
+      </div>
+    </div>
+    <form name="form" ng-submit="addComment(form)" novalidate>
+      <div class="comment-form input-group">
+        <span class="input-group-addon" id="basic-addon1">@{{touchUser.name}}</span>
+        <input type="text" name="comment" class="form-control" placeholder="评论..." ng-model="comment"
+               ng-maxlength="200"
+               required>
+
+      <span class="input-group-btn">
+        <button class="btn btn-primary" type="submit">发送</button>
+      </span>
+
+
+      </div>
+      <p class="help-block" ng-show="form.comment.$error.required && submitted">
+        评论不能为空
+      </p>
+
+      <p class="help-block"
+         ng-show="form.comment.$error.maxlength  && submitted">
+        评论太长
+      </p>
+    </form>
+  </div>
+
+
+</div>

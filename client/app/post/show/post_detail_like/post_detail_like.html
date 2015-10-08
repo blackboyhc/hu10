@@ -1,0 +1,4 @@
+<div id="div-like">
+  <span class="font-icon glyphicon glyphicon-heart" ng-class="{'like-on':isLiked()}" aria-hidden="true"></span>
+  <span class="label label-info" ng-repeat="user in post.like">{{user.name}}</span>
+</div>

@@ -1,0 +1,183 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container">
+  <tabset>
+    <tab heading="个人信息">
+      <div class="row">
+        <div class="col-sm-12">
+          <h3>编辑个人资料</h3>
+
+          <form class="form" name="profileForm" ng-submit="changeProfile(profileForm)" novalidate>
+            <div class="form-group" ng-class="{ 'has-success': profileForm.name.$valid && profileSubmitted,
+                                            'has-error': profileForm.name.$invalid && profileSubmitted }">
+              <label>姓名</label>
+
+              <input type="text" name="name" class="form-control" ng-model="newUser.name"
+                     required/>
+
+              <p class="help-block text-warning" ng-show="profileForm.name.$error.required && profileSubmitted">
+                姓名必须填写
+              </p>
+            </div>
+            <div class="form-group">
+              <label>个性签名</label>
+              <input type="text" name="signature" class="form-control" ng-model="newUser.signature"/>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <div class="col-sm-3 col-md-3 col-xs-6 col-lg-2">
+                  <label>头像</label>
+
+                  <div class="set-profile" type="file" ngf-select accept="image/*" name="avatar"
+                       ngf-resize="{width: 100, height: 100}"
+                       ngf-keep="false" ngf-max-size="1MB" ng-model="newUser.avatar">
+                    <img class="img-circle"
+                         ngf-src="newUser.avatar || '{{user.avatar | ImgSrcComplete: user.account:'avatar'}}'"/>
+                  </div>
+                </div>
+              </div>
+              <p class="help-block text-warning" ng-show="profileForm.avatar.$error.maxSize">
+                图片太大
+              </p>
+            </div>
+            <p class="help-block"> {{ message3 }} </p>
+
+            <div>
+              <button class="btn btn-primary" type="submit">
+                确认修改
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </tab>
+    <tab heading="孩子">
+      <div class="row">
+        <div class="col-sm-9">
+          <h3>添加孩子</h3>
+
+          <form class="form" name="addKidForm" ng-submit="addKid(addKidForm)" novalidate>
+
+            <div class="form-group" ng-class="{ 'has-success': addKidForm.name.$valid && addKidFormSubmitted,
+                                            'has-error': addKidForm.name.$invalid && addKidFormSubmitted }">
+              <label>姓名</label>
+
+              <input type="text" name="name" class="form-control" ng-model="kid.name"
+                     required/>
+
+              <p class="help-block text-warning" ng-show="addKidForm.name.$error.required && addKidFormSubmitted">
+                姓名必须填写
+              </p>
+            </div>
+
+            <div class="form-group" ng-class="{ 'has-success': addKidForm.birthday.$valid && addKidFormSubmitted,
+                                            'has-error': addKidForm.birthday.$invalid && addKidFormSubmitted }">
+              <label>生日</label>
+
+              <input type="date" name="birthday" class="form-control" ng-model="kid.birthday"
+                     ng-required="true"/>
+
+              <p class="help-block text-warning" ng-show="addKidForm.birthday.$error.required && addKidFormSubmitted">
+                生日必须填写
+              </p>
+            </div>
+            <div class="form-group" ng-class="{ 'has-success': addKidForm.boyOrGirl.$valid && addKidFormSubmitted,
+                                            'has-error': addKidForm.boyOrGirl.$invalid && addKidFormSubmitted }">
+              <label>男孩还是女孩？ </label>
+
+              <label class="radio-inline">
+                <input type="radio" name="boyOrGirl" id="radio1" value="boy" ng-change="chooseBoyOrGirl(addKidForm)"
+                       ng-model="kid.boyOrGirl"> 男孩
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="boyOrGirl" id="radio2" value="girl" ng-change="chooseBoyOrGirl(addKidForm)"
+                       ng-model="kid.boyOrGirl"> 女孩
+              </label>
+
+              <p class="help-block text-warning" ng-show="addKidForm.boyOrGirl.$error.required && addKidFormSubmitted">
+                请选择男孩还是女孩
+              </p>
+            </div>
+            <div class="form-group">
+              <label>选择头像</label>
+
+              <div class="set-profile" name="kidAvatar">
+                <img src="assets/images/{{kid.avatar}}" ng-click="isAvatarsCollapsed = !isAvatarsCollapsed"/>
+              </div>
+              <div class="well well-sm" collapse="isAvatarsCollapsed">
+                <div class="row">
+                  <div class="col-lg-2 col-xs-3 col-sm-3 set-profile"
+                       ng-repeat="avatar in avatars | filter: kid.boyOrGirl">
+                    <img ng-src="assets/images/{{avatar}}" ng-click="chooseKidAvatar(addKidForm,avatar)"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <p class="help-block"> {{ message2 }} </p>
+
+            <div>
+              <button class="btn btn-primary" type="submit">
+                确认添加
+              </button>
+            </div>
+          </form>
+          <hr>
+        </div>
+        <div class="col-sm-3">
+          <h3>我的孩子</h3>
+
+          <div class="row">
+            <div class="col-sm-10" ng-repeat="kid in user.kids">
+              <div class="thumbnail">
+                <h4>{{kid.name}}(Lv{{kid.level}})</h4>
+                <a href="#">
+                  <img ng-src="assets/images/{{kid.avatar}}" alt="{{kid.name}}">
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </tab>
+    <tab heading="账户">
+      <div class="row">
+        <div class="col-sm-12">
+          <h3>修改密码</h3>
+
+          <form class="form" name="cpForm" ng-submit="changePassword(cpForm)" novalidate>
+
+            <div class="form-group">
+              <label>当前密码</label>
+
+              <input type="password" name="password" class="form-control" ng-model="newUser.oldPassword"
+                     mongoose-error/>
+
+              <p class="help-block text-warning" ng-show="cpForm.password.$error.mongoose">
+                {{ errors.other }}
+              </p>
+            </div>
+
+            <div class="form-group">
+              <label>新密码</label>
+
+              <input type="password" name="newPassword" class="form-control" ng-model="newUser.newPassword"
+                     ng-minlength="6"
+                     required/>
+
+              <p class="help-block text-warning"
+                 ng-show="(cpForm.newPassword.$error.minlength || cpForm.newPassword.$error.required) && (cpForm.newPassword.$dirty || cpFormSubmitted)">
+                密码长度必须大于6
+              </p>
+            </div>
+
+            <p class="help-block"> {{ message1 }} </p>
+            <button class="btn btn-primary" type="submit">确认修改</button>
+          </form>
+        </div>
+      </div>
+    </tab>
+  </tabset>
+</div>
+

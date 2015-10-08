@@ -1,0 +1,44 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>登录</h1>
+    </div>
+    <div class="col-sm-12">
+      <form class="form" name="form" ng-submit="login(form)" novalidate>
+
+        <div class="form-group">
+          <label>账号(手机号)</label>
+
+          <input type="text" name="account" class="form-control" ng-model="user.account" required>
+        </div>
+
+        <div class="form-group">
+          <label>密码</label>
+
+          <input type="password" name="password" class="form-control" ng-model="user.password" required>
+        </div>
+
+        <div class="form-group has-error">
+          <p class="help-block text-warning" ng-show="form.account.$error.required && form.password.$error.required && submitted">
+             请输入账号和密码
+          </p>
+
+          <p class="help-block">{{ errors.other }}</p>
+        </div>
+
+        <div>
+          <button class="btn btn-primary btn-login" type="submit">
+            登录
+          </button>
+          <a class="btn btn-default btn-register" href="/signup">
+            注册
+          </a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+  <hr>
+</div>
