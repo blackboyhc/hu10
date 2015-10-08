@@ -16,7 +16,7 @@ angular.module('hu10App')
         })
         .then( function() {
           // Account created, redirect to home
-          $location.path('/');
+          $location.path('/settings');
         })
         .catch( function(err) {
           err = err.data;

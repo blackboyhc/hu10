@@ -2,27 +2,28 @@
 
 angular.module('hu10App')
   .controller('PostShowCtrl', function ($scope,$stateParams, Post, socket, Auth) {
-    $scope.posts = [];
-    $scope.currentUser = Auth.getCurrentUser();
     $scope.selUserId = $stateParams.userId;
-    $scope.selUser = $scope.currentUser;
-    if($scope.selUserId){
-      Auth.getUserInfo($scope.selUserId)
-        .then(function(ofwho){
-          $scope.selUser = ofwho;
-          console.info(ofwho);
-        })
-        .catch(function() {
-        });
-      Post.listPostOfWho($scope.selUserId,function(posts){
-        $scope.posts = posts;
-      });
-    }else{
-      Post.listPost(function(posts){
-        $scope.posts = posts;
-      });
+    if (!$scope.currentUser) {
+      $scope.currentUser = Auth.getCurrentUser();
+      $scope.selUser = $scope.currentUser;
     }
-
+    if (!$scope.posts) {
+      if ($scope.selUserId) {
+        Auth.getUserInfo($scope.selUserId)
+          .then(function (ofwho) {
+            $scope.selUser = ofwho;
+          })
+          .catch(function () {
+          });
+        Post.listPostOfWho($scope.selUserId, function (posts) {
+          $scope.posts = posts;
+        });
+      } else {
+        Post.listPost(function (posts) {
+          $scope.posts = posts;
+        });
+      }
+    }
     socket.syncUpdates('post', $scope.posts);
     $scope.$on('$destroy', function () {
       socket.unsyncUpdates('post');

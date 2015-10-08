@@ -72,7 +72,7 @@ exports.show = function (req, res) {
         return handleError(res, err);
       }
       if (!post) {
-        return res.status(404).send('Not Found');
+        return res.status(404).json({code:-2, msg:'Not Found'});
       }
       var opts = [{
         path: 'comments.from',
@@ -93,7 +93,7 @@ exports.show = function (req, res) {
 exports.create = function (req, res) {
   var author = req.body.author;
   if(!author){
-    return res.status(403).send('Forbidden');
+    return res.status(403).json({code: -1,msg:'Forbidden'});
   }
   var content;
   Post.create(req.body, function (err, post) {
@@ -117,7 +117,6 @@ exports.create = function (req, res) {
             if (err) {
               console.info(err);
             }
-            //return res.status(200).json(post);
           });
         }else{
           tag.useCount++;
@@ -125,7 +124,6 @@ exports.create = function (req, res) {
             if (err) {
               console.info(err);
             }
-            //return res.status(200).json(post);
           });
         }
       }
@@ -145,7 +143,7 @@ exports.addComment = function (req, res) {
         return handleError(res, err);
       }
       if (!post) {
-        return res.status(404).send('Post Not Found');
+        return res.status(404).json({code:-2, msg:'Not Found'});
       }
       post.comments.push(comment);
       post.save(function (err) {
@@ -166,7 +164,7 @@ exports.addOrRemoveLike = function (req, res) {
       return handleError(res, err);
     }
     if (!post) {
-      return res.status(404).send('Post Not Found');
+      return res.status(404).json({code:-2, msg:'Not Found'});
     }
     if(post.like.indexOf(req.body.userId) !== -1){
       post.like.pull(req.body.userId);
@@ -191,7 +189,7 @@ exports.update = function (req, res) {
       return handleError(res, err);
     }
     if (!post) {
-      return res.status(404).send('Not Found');
+      return res.status(404).json({code:-2, msg:'Not Found'});
     }
     var updated = _.merge(post, req.body);
     updated.save(function (err) {
@@ -210,17 +208,17 @@ exports.destroy = function (req, res) {
       return handleError(res, err);
     }
     if (!post) {
-      return res.status(404).send('Not Found');
+      return res.status(404).json({code:-2, msg:'Not Found'});
     }
     post.remove(function (err) {
       if (err) {
         return handleError(res, err);
       }
-      return res.status(204).send('No Content');
+      return res.status(204).json({code:-2, msg:'No Content'});
     });
   });
 };
 
 function handleError(res, err) {
-  return res.status(500).send(err);
+  return res.status(500).json(err);
 }

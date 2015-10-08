@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('hu10App')
-  .controller('LoginCtrl', function ($scope, Auth, $location,$rootScope) {
+  .controller('LoginCtrl', function ($scope, Auth, $location) {
     $scope.user = {};
     $scope.errors = {};
 

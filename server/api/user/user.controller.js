@@ -16,7 +16,7 @@ var validationError = function(res, err) {
  */
 exports.index = function(req, res) {
   User.find({}, '-salt -hashedPassword', function (err, users) {
-    if(err) return res.status(500).send(err);
+    if(err) return res.status(500).json(err);
     res.status(200).json(users);
   });
 };
@@ -42,8 +42,8 @@ exports.create = function (req, res, next) {
  */
 exports.destroy = function(req, res) {
   User.findByIdAndRemove(req.params.id, function(err, user) {
-    if(err) return res.status(500).send(err);
-    return res.status(204).send('No Content');
+    if(err) return res.status(500).json(err);
+    return res.status(204).json({code:-1,msg:'No Content'});
   });
 };
 
@@ -60,10 +60,10 @@ exports.changePassword = function(req, res, next) {
       user.password = newPass;
       user.save(function(err) {
         if (err) return validationError(res, err);
-        res.status(200).send('OK');
+        res.status(200).json(user);
       });
     } else {
-      res.status(403).send('Forbidden');
+      res.status(403).json({code:-1,msg:'Forbidden'});
     }
   });
 };
@@ -83,10 +83,10 @@ exports.changeProfile = function(req, res, next) {
       user.avatar = avatar;
       user.save(function(err) {
         if (err) return validationError(res, err);
-        res.status(200).send('OK');
+        res.status(200).json(user);
       });
     } else {
-      res.status(403).send('Forbidden');
+      res.status(403).json({code:-1,msg:'Forbidden'});
     }
   });
 };
@@ -110,11 +110,11 @@ exports.addKids = function(req, res, next) {
     if (err) return validationError(res, err);
     User.findById(parent, function (err, user) {
       if (err) return next(err);
-      if (!user) return res.status(401).send('Unauthorized');
+      if (!user) return res.status(401).json({code:-1,msg:'Unauthorized'});
       user.kids.push(kid._id);
-      user.save(function(err, kid) {
+      user.save(function(err, user) {
         if (err) return next(err);
-        res.status(200).json(user);
+        res.status(200).json(kid);
       });
     });
   });
@@ -133,7 +133,7 @@ exports.me = function(req, res, next) {
     .select('-salt -hashedPassword')
     .exec(function(err, user) { // don't ever give out the password or salt
       if (err) return next(err);
-      if (!user) return res.status(401).send('Unauthorized');
+      if (!user) return res.status(401).json({code:-1,msg:'Unauthorized'});
       res.json(user);
     });
 };
@@ -151,7 +151,7 @@ exports.show = function (req, res, next) {
     .select('-salt -hashedPassword -invite -role')
     .exec(function(err, user) { // don't ever give out the password or salt
       if (err) return next(err);
-      if (!user) return res.status(401).send('Unauthorized');
+      if (!user) return res.status(401).json({code:-1,msg:'Unauthorized'});
       res.json(user);
     });
 };

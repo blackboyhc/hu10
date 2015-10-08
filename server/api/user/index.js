@@ -11,7 +11,7 @@ router.get('/', auth.hasRole('admin'), controller.index);
 router.delete('/:id', auth.hasRole('admin'), controller.destroy);
 router.get('/me', auth.isAuthenticated(), controller.me);
 router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);
-router.post('/:id/profile', auth.isAuthenticated(), controller.changeProfile);
+router.put('/:id/profile', auth.isAuthenticated(), controller.changeProfile);
 router.put('/:id/addkids', auth.isAuthenticated(), controller.addKids);
 router.get('/:id', auth.isAuthenticated(), controller.show);
 router.post('/', controller.create);

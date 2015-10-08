@@ -89,23 +89,18 @@ angular.module('hu10App')
           return cb(err);
         }).$promise;
       },
-      changeProfile: function(name, signature, avatar) {
-        var deferred = $q.defer();
-
-        $http.post('/api/users/' + currentUser._id + "/profile", {
+      changeProfile: function(name, signature, avatar, callback) {
+        var cb = callback || angular.noop;
+        return User.changeProfile({ id: currentUser._id }, {
           name: name,
-          signature: signature,
-          avatar: avatar
-        }).
-        success(function(data) {
-          console.info(data);
+            signature: signature,
+            avatar: avatar
+        }, function(data) {
           currentUser = User.get();
-          deferred.resolve(data);
-        }).
-        error(function(err) {
-          deferred.reject(err);
-        });
-        return deferred.promise;
+          return cb(data);
+        }, function(err) {
+          return cb(err);
+        }).$promise;
       },
       addKids: function(name, birthday,boyOrGirl,avatar, callback) {
         var cb = callback || angular.noop;
@@ -115,9 +110,9 @@ angular.module('hu10App')
           birthday: birthday,
           avatar:avatar,
           boyOrGirl:boyOrGirl
-        }, function(user) {
+        }, function(kid) {
           currentUser = User.get();
-          return cb(user);
+          return cb(kid);
         }, function(err) {
           return cb(err);
         }).$promise;
@@ -133,20 +128,11 @@ angular.module('hu10App')
 
       getUserInfo: function(userId, callback){
         var cb = callback || angular.noop;
-        var deferred = $q.defer();
-
-        $http.get('/api/users/'+ userId)
-          .success(function(data) {
-            deferred.resolve(data);
-            return cb(data);
-          }).
-          error(function(err) {
-            this.logout();
-            deferred.reject(err);
-            return cb(err);
-          }.bind(this));
-
-        return deferred.promise;
+        return User.get({ id: userId }, function(user) {
+          return cb(user);
+        }, function(err) {
+          return cb(err);
+        }).$promise;
       },
 
       /**
